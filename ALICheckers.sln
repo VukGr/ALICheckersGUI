@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALICheckersGUI", "ALICheckersGUI\ALICheckersGUI.csproj", "{15548E36-F9EE-4F32-9E57-59B0CE104F5D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ALICheckersLogic", "ALICheckersLogic\ALICheckersLogic.csproj", "{DB9BD3E1-8027-4016-AAC2-2122AF86C8C3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15548E36-F9EE-4F32-9E57-59B0CE104F5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15548E36-F9EE-4F32-9E57-59B0CE104F5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15548E36-F9EE-4F32-9E57-59B0CE104F5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15548E36-F9EE-4F32-9E57-59B0CE104F5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB9BD3E1-8027-4016-AAC2-2122AF86C8C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB9BD3E1-8027-4016-AAC2-2122AF86C8C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB9BD3E1-8027-4016-AAC2-2122AF86C8C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB9BD3E1-8027-4016-AAC2-2122AF86C8C3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68E34191-5724-4909-81C6-8207E081C164}
+	EndGlobalSection
+EndGlobal

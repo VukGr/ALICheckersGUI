@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\bg1.png" />
+    <None Remove="Images\bg2.png" />
+    <None Remove="Images\GameToolPressed.png" />
+    <None Remove="Images\p1_king.png" />
+    <None Remove="Images\p1_pawn.png" />
+    <None Remove="Images\p2_king.png" />
+    <None Remove="Images\p2_pawn.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ALICheckersLogic\ALICheckersLogic.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\bg1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\bg2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\GameToolPressed.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\p1_king.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\p1_pawn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\p2_king.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\p2_pawn.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
+</Project>

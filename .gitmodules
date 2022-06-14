@@ -1,0 +1,3 @@
+[submodule "ALICheckersLogic"]
+	path = ALICheckersLogic
+	url = https://github.com/ficakum/ALICheckers
