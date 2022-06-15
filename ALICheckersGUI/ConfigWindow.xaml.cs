@@ -25,6 +25,14 @@ namespace ALICheckersGUI
             InitializeComponent();
         }
 
+        public ConfigWindow(bool p1CPU, bool p2CPU, int refreshrate)
+        {
+            InitializeComponent();
+            P1CpuCheckBox.IsChecked = p1CPU;
+            P2CpuCheckBox.IsChecked = p2CPU;
+            RefreshRateInput.Text = refreshrate.ToString();
+        }
+
         public bool Player1CPU {
             get { return P1CpuCheckBox.IsChecked?? false; }
         }
