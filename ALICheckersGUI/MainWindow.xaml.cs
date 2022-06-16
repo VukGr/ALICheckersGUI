@@ -53,6 +53,8 @@ namespace ALICheckersGUI
         (int y, int x) from = FROM_EMPTY;
 
         bool pausedAI = false;
+        bool finishedGame = false;
+        bool useCache = false;
 
         DispatcherTimer dt = new DispatcherTimer();
         SemaphoreSlim semaphore = new SemaphoreSlim(0, 1);
@@ -74,14 +76,14 @@ namespace ALICheckersGUI
                 {
                     if (!pausedAI && isCPU[board.playing] && !board.IsFinished())
                     {
-                        (int score, Board newBoard) = board.Minmax(8);
+                        (int score, Board newBoard) = board.Minmax(7);
                         if (newBoard != null)
                         {
                             // Abort if paused mid minmax call.
                             if (!pausedAI)
                                 SetNewBoard(newBoard);
                         } 
-                        else MessageBox.Show("Minmax could not calculate next state.");
+                        else MessageBox.Show("Minmax could not calculate next state.", "Checkers");
                     }
                     else
                     {
@@ -106,6 +108,8 @@ namespace ALICheckersGUI
             isCPU[Color.White] = configDialog.Player2CPU;
             PauseAIButton.IsEnabled = configDialog.Player1CPU || configDialog.Player2CPU;
             refreshrate = configDialog.RefreshRate;
+            useCache = configDialog.UseCache;
+            board.useCache = useCache;
         }
 
         private void SetNewBoard(Board newBoard)
@@ -120,6 +124,12 @@ namespace ALICheckersGUI
                 boardHistory.Add(Tuple.Create(boardHistory.Count, newBoard));
                 HistoryListBox.ScrollIntoView(boardHistory.Last());
                 HistoryListBox.SelectedItem = boardHistory.Last();
+
+                if(newBoard.IsFinished())
+                {
+                    string winningPlayer = board.playing == Color.Black ? "Blue" : "Red";
+                    MessageBox.Show($"{winningPlayer} wins!", "Checkers");
+                }
             });
             board = newBoard;
         }
@@ -148,6 +158,7 @@ namespace ALICheckersGUI
         private void ResetGame()
         {
             board = new Board(8);
+            board.useCache = useCache;
             boardHistory.Clear();
 
             var startState = Tuple.Create(0, board);
@@ -220,7 +231,7 @@ namespace ALICheckersGUI
 
                 if (board.GetMoveType((from, to)) == MoveType.Normal && board.GetAllMovesByType(MoveType.Capture).Count() != 0)
                 {
-                    MessageBox.Show("There is a capture move available.");
+                    MessageBox.Show("There is a capture move available.", "Checkers");
                 }
                 else
                 {
@@ -230,10 +241,6 @@ namespace ALICheckersGUI
                         SetNewBoard(newBoard);
                         if (!pausedAI)
                             UnblockCPU();
-                    }
-                    else
-                    {
-                        StatusLabel.Content = $"Invalid Move: {from} to {to}";
                     }
                 }
                 from = FROM_EMPTY;
@@ -276,20 +283,23 @@ namespace ALICheckersGUI
                 UpdateGUI();
             }
         }
-        #endregion
 
         private void HistoryPrevButton_Click(object sender, RoutedEventArgs e)
         {
             if(HistoryListBox.SelectedIndex > 0)
                 HistoryListBox.SelectedIndex--;
-            SetPauseAI(true);
         }
 
         private void HistoryNextButton_Click(object sender, RoutedEventArgs e)
         {
             if (HistoryListBox.SelectedIndex < boardHistory.Count())
                 HistoryListBox.SelectedIndex++;
+        }
+
+        private void HistoryListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
             SetPauseAI(true);
         }
+        #endregion
     }
 }

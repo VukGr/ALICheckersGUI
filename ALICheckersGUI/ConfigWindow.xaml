@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ALICheckersGUI"
         mc:Ignorable="d"
-        Title="Config" Height="145" Width="140" ResizeMode="NoResize">
+        Title="Config" Height="153" Width="238" ResizeMode="NoResize">
     <Grid>
         <CheckBox Content="Player1 CPU" x:Name="P1CpuCheckBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.195,0.369" FlowDirection="RightToLeft">
             <CheckBox.Resources>
@@ -23,6 +23,15 @@
         </CheckBox>
         <TextBox HorizontalAlignment="Left" x:Name="RefreshRateInput" Text="50" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" Margin="78,51,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
         <Label Content="Refreshrate" HorizontalAlignment="Left" Margin="5,47,0,0" VerticalAlignment="Top"/>
-        <Button Content="Done" HorizontalAlignment="Left" Margin="78,80,0,0" VerticalAlignment="Top" Click="Button_Click" Width="40"/>
+        <Button Name="DoneButtons" Content="Done" HorizontalAlignment="Center" Margin="0,91,0,0" VerticalAlignment="Top" Click="DoneButtons_Click" Width="40" RenderTransformOrigin="0.106,0.517"/>
+        <Button Name="LoadCacheButton" Content="Load Cache" HorizontalAlignment="Left" Margin="135,32,0,0" VerticalAlignment="Top" Click="LoadCacheButton_Click" Width="75"/>
+        <Button Name="SaveCacheButton" Content="Save Cache" HorizontalAlignment="Left" Margin="135,60,0,0" VerticalAlignment="Top" Click="SaveCacheButton_Click" Width="75"/>
+        <CheckBox Content="Use Cache" x:Name="UseCacheCheckBox" HorizontalAlignment="Left" Margin="135,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.195,0.369" FlowDirection="RightToLeft">
+            <CheckBox.Resources>
+                <Style TargetType="{x:Type Path}">
+                    <Setter Property="FlowDirection" Value="LeftToRight" />
+                </Style>
+            </CheckBox.Resources>
+        </CheckBox>
     </Grid>
 </Window>

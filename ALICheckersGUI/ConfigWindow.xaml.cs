@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ALICheckersLogic;
+using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +22,6 @@ namespace ALICheckersGUI
     /// </summary>
     public partial class ConfigWindow : Window
     {
-        public ConfigWindow()
-        {
-            InitializeComponent();
-        }
-
         public ConfigWindow(bool p1CPU, bool p2CPU, int refreshrate)
         {
             InitializeComponent();
@@ -33,7 +30,8 @@ namespace ALICheckersGUI
             RefreshRateInput.Text = refreshrate.ToString();
         }
 
-        public bool Player1CPU {
+        public bool Player1CPU 
+        {
             get { return P1CpuCheckBox.IsChecked?? false; }
         }
         public bool Player2CPU
@@ -49,7 +47,12 @@ namespace ALICheckersGUI
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public bool UseCache
+        {
+            get { return UseCacheCheckBox.IsChecked?? false; }
+        }
+
+        private void DoneButtons_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
         }
@@ -58,6 +61,22 @@ namespace ALICheckersGUI
         {
             Regex regex = new Regex("[^0-9]+");
             e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void LoadCacheButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Json files (*.json)|*.json|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+                Board.LoadCache(openFileDialog.FileName);
+        }
+
+        private void SaveCacheButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Json files (*.json)|*.json|All files (*.*)|*.*";
+            if (saveFileDialog.ShowDialog() == true)
+                Board.SaveCache(saveFileDialog.FileName);
         }
     }
 }
