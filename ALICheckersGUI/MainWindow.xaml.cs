@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -25,6 +26,9 @@ namespace ALICheckersGUI
     public partial class MainWindow : Window
     {
         Board board = new Board(8);
+
+        ObservableCollection<Tuple<int, Board>> boardHistory = new ObservableCollection<Tuple<int, Board>>();
+        int curHistoryId = 0; 
 
         readonly Dictionary<Piece, BitmapImage> images = new Dictionary<Piece, BitmapImage>
         {
@@ -60,8 +64,8 @@ namespace ALICheckersGUI
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            ResetGame();
             UpdateGUI();
-
             ShowOptions();
 
             Task.Run(async () =>
@@ -100,13 +104,24 @@ namespace ALICheckersGUI
             configDialog.ShowDialog();
             isCPU[Color.Black] = configDialog.Player1CPU;
             isCPU[Color.White] = configDialog.Player2CPU;
+            PauseAIButton.IsEnabled = configDialog.Player1CPU || configDialog.Player2CPU;
             refreshrate = configDialog.RefreshRate;
         }
 
         private void SetNewBoard(Board newBoard)
         {
+            Application.Current.Dispatcher.BeginInvoke(() => {
+                if (board.prevBoard != boardHistory.Last().Item2)
+                {
+                    boardHistory = new ObservableCollection<Tuple<int, Board>>(boardHistory.Where(t => t.Item1 <= curHistoryId));
+                    HistoryListBox.ItemsSource = boardHistory;
+                }
+
+                boardHistory.Add(Tuple.Create(boardHistory.Count, newBoard));
+                HistoryListBox.ScrollIntoView(boardHistory.Last());
+                HistoryListBox.SelectedItem = boardHistory.Last();
+            });
             board = newBoard;
-            
         }
 
         private void SetPauseAI(bool newPausedAI)
@@ -129,6 +144,18 @@ namespace ALICheckersGUI
             if (isCPU[board.playing] && semaphore.CurrentCount == 0)
                 semaphore.Release();
         }
+
+        private void ResetGame()
+        {
+            board = new Board(8);
+            boardHistory.Clear();
+
+            var startState = Tuple.Create(0, board);
+            boardHistory.Add(startState);
+            HistoryListBox.ItemsSource = boardHistory;
+            HistoryListBox.SelectedItem = startState;
+        }
+
         #endregion
 
         #region GUI
@@ -190,15 +217,24 @@ namespace ALICheckersGUI
             else
             {
                 (int y, int x) to = (y, x);
-                Board newBoard = board.NextState(from, to, true);
-                if (newBoard != null)
+
+                if (board.GetMoveType((from, to)) == MoveType.Normal && board.GetAllMovesByType(MoveType.Capture).Count() != 0)
                 {
-                    board = newBoard;
-                    UnblockCPU();
+                    MessageBox.Show("There is a capture move available.");
                 }
                 else
                 {
-                    StatusLabel.Content = $"Invalid Move: {from} to {to}";
+                    Board newBoard = board.NextState(from, to, true);
+                    if (newBoard != null)
+                    {
+                        SetNewBoard(newBoard);
+                        if (!pausedAI)
+                            UnblockCPU();
+                    }
+                    else
+                    {
+                        StatusLabel.Content = $"Invalid Move: {from} to {to}";
+                    }
                 }
                 from = FROM_EMPTY;
             }
@@ -218,9 +254,42 @@ namespace ALICheckersGUI
 
         private void NewGameButton_Click(object sender, RoutedEventArgs e)
         {
-            board = new Board(8);
+            ResetGame();
             SetPauseAI(true);
         }
+
+        private void HistoryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((e.AddedItems as IList<object>).Count() == 0)
+                return;
+
+            Tuple<int, Board> selectedItem = e.AddedItems[0] as Tuple<int, Board>;
+            Board newBoard = selectedItem.Item2;
+            curHistoryId = selectedItem.Item1;
+
+            HistoryPrevButton.IsEnabled = curHistoryId != 0;
+            HistoryNextButton.IsEnabled = curHistoryId != boardHistory.Count()-1;
+
+            if (newBoard != board)
+            {
+                board = newBoard;
+                UpdateGUI();
+            }
+        }
         #endregion
+
+        private void HistoryPrevButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(HistoryListBox.SelectedIndex > 0)
+                HistoryListBox.SelectedIndex--;
+            SetPauseAI(true);
+        }
+
+        private void HistoryNextButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (HistoryListBox.SelectedIndex < boardHistory.Count())
+                HistoryListBox.SelectedIndex++;
+            SetPauseAI(true);
+        }
     }
 }
