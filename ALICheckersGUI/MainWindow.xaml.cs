@@ -47,6 +47,18 @@ namespace ALICheckersGUI
         };
         int refreshrate = 50;
 
+        Dictionary<Color, (int piece, int position, int raadom)> scoreWeights = new Dictionary<Color, (int piece, int position, int raadom)>
+        {
+            { Color.Black, (100, 10, 1) },
+            { Color.White, (100, 10, 1) }
+        };
+
+        Dictionary<Color, int> cpuDepth = new Dictionary<Color, int>
+        {
+            { Color.Black, 6 },
+            { Color.White, 6 }
+        };
+
         const int SQUARE_SIZE = 50;
 
         static readonly (int y, int x) FROM_EMPTY = (-1, -1);
@@ -76,7 +88,7 @@ namespace ALICheckersGUI
                 {
                     if (!pausedAI && isCPU[board.playing] && !board.IsFinished())
                     {
-                        (int score, Board newBoard) = board.Minmax(7);
+                        (int score, Board newBoard) = board.Minmax(cpuDepth[board.playing], scoreWeights[board.playing]);
                         if (newBoard != null)
                         {
                             // Abort if paused mid minmax call.
@@ -102,14 +114,22 @@ namespace ALICheckersGUI
         #region Utils
         private void ShowOptions()
         {
-            var configDialog = new ConfigWindow(isCPU[Color.Black], isCPU[Color.White], refreshrate);
+            var configDialog = new ConfigWindow(isCPU[Color.Black], isCPU[Color.White], cpuDepth[Color.Black], cpuDepth[Color.White], scoreWeights[Color.Black], scoreWeights[Color.White], refreshrate);
             configDialog.ShowDialog();
             isCPU[Color.Black] = configDialog.Player1CPU;
             isCPU[Color.White] = configDialog.Player2CPU;
             PauseAIButton.IsEnabled = configDialog.Player1CPU || configDialog.Player2CPU;
+
+            cpuDepth[Color.Black] = configDialog.CPU1Depth;
+            cpuDepth[Color.White] = configDialog.CPU2Depth;
+
+            scoreWeights[Color.Black] = configDialog.CPU1Weights;
+            scoreWeights[Color.White] = configDialog.CPU2Weights;
+
             refreshrate = configDialog.RefreshRate;
+
             useCache = configDialog.UseCache;
-            board.useCache = useCache;
+            Board.useCache = useCache;
         }
 
         private void SetNewBoard(Board newBoard)
@@ -129,6 +149,11 @@ namespace ALICheckersGUI
                 {
                     string winningPlayer = board.playing == Color.Black ? "Blue" : "Red";
                     MessageBox.Show($"{winningPlayer} wins!", "Checkers");
+                }
+                else if (curHistoryId == 150)
+                {
+                    SetPauseAI(true);
+                    MessageBox.Show("Draw", "Checkers");
                 }
             });
             board = newBoard;
@@ -158,7 +183,7 @@ namespace ALICheckersGUI
         private void ResetGame()
         {
             board = new Board(8);
-            board.useCache = useCache;
+            Board.useCache = useCache;
             boardHistory.Clear();
 
             var startState = Tuple.Create(0, board);
@@ -286,14 +311,16 @@ namespace ALICheckersGUI
 
         private void HistoryPrevButton_Click(object sender, RoutedEventArgs e)
         {
-            if(HistoryListBox.SelectedIndex > 0)
+            if (HistoryListBox.SelectedIndex > 0)
                 HistoryListBox.SelectedIndex--;
+            SetPauseAI(true);
         }
 
         private void HistoryNextButton_Click(object sender, RoutedEventArgs e)
         {
             if (HistoryListBox.SelectedIndex < boardHistory.Count())
                 HistoryListBox.SelectedIndex++;
+            SetPauseAI(true);
         }
 
         private void HistoryListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

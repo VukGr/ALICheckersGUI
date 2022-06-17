@@ -5,33 +5,56 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ALICheckersGUI"
         mc:Ignorable="d"
-        Title="Config" Height="153" Width="238" ResizeMode="NoResize">
-    <Grid>
-        <CheckBox Content="Player1 CPU" x:Name="P1CpuCheckBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.195,0.369" FlowDirection="RightToLeft">
+        Title="Config" Height="191" Width="505" ResizeMode="NoResize" Loaded="Window_Loaded">
+    <Grid Margin="0,0,0,-6">
+        <CheckBox Content="Player1 CPU" x:Name="P1CpuCheckBox" HorizontalAlignment="Left" Margin="10,24,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.195,0.369" FlowDirection="RightToLeft" Click="P1CpuCheckBox_Checked">
             <CheckBox.Resources>
                 <Style TargetType="{x:Type Path}">
                     <Setter Property="FlowDirection" Value="LeftToRight" />
                 </Style>
             </CheckBox.Resources>
         </CheckBox>
-        <CheckBox Content="Player2 CPU" x:Name="P2CpuCheckBox" HorizontalAlignment="Left" Margin="10,30,0,0" VerticalAlignment="Top" FlowDirection="RightToLeft">
+        <CheckBox Content="Player2 CPU" x:Name="P2CpuCheckBox" HorizontalAlignment="Left" Margin="10,59,0,0" VerticalAlignment="Top" FlowDirection="RightToLeft" Click="P2CpuCheckBox_Checked">
             <CheckBox.Resources>
                 <Style TargetType="{x:Type Path}">
                     <Setter Property="FlowDirection" Value="LeftToRight"/>
                 </Style>
             </CheckBox.Resources>
         </CheckBox>
-        <TextBox HorizontalAlignment="Left" x:Name="RefreshRateInput" Text="50" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" Margin="78,51,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
-        <Label Content="Refreshrate" HorizontalAlignment="Left" Margin="5,47,0,0" VerticalAlignment="Top"/>
-        <Button Name="DoneButtons" Content="Done" HorizontalAlignment="Center" Margin="0,91,0,0" VerticalAlignment="Top" Click="DoneButtons_Click" Width="40" RenderTransformOrigin="0.106,0.517"/>
-        <Button Name="LoadCacheButton" Content="Load Cache" HorizontalAlignment="Left" Margin="135,32,0,0" VerticalAlignment="Top" Click="LoadCacheButton_Click" Width="75"/>
-        <Button Name="SaveCacheButton" Content="Save Cache" HorizontalAlignment="Left" Margin="135,60,0,0" VerticalAlignment="Top" Click="SaveCacheButton_Click" Width="75"/>
-        <CheckBox Content="Use Cache" x:Name="UseCacheCheckBox" HorizontalAlignment="Left" Margin="135,9,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.195,0.369" FlowDirection="RightToLeft">
+        <TextBox HorizontalAlignment="Left" x:Name="RefreshRateInput" Text="50" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" Margin="78,90,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
+        <Label Content="Refreshrate" HorizontalAlignment="Left" Margin="4,86,0,0" VerticalAlignment="Top"/>
+        <Button Name="DoneButtons" Content="Done" HorizontalAlignment="Left" Margin="427,124,0,0" VerticalAlignment="Top" Click="DoneButtons_Click" Width="40" RenderTransformOrigin="0.106,0.517"/>
+        <Button Name="LoadCacheButton" Content="Load Cache" HorizontalAlignment="Left" Margin="98,124,0,0" VerticalAlignment="Top" Click="LoadCacheButton_Click" Width="74"/>
+        <Button Name="SaveCacheButton" Content="Save Cache" HorizontalAlignment="Left" Margin="180,124,0,0" VerticalAlignment="Top" Click="SaveCacheButton_Click" Width="76"/>
+        <CheckBox Content="Use Cache" x:Name="UseCacheCheckBox" HorizontalAlignment="Left" Margin="10,126,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.195,0.369" FlowDirection="RightToLeft">
             <CheckBox.Resources>
                 <Style TargetType="{x:Type Path}">
                     <Setter Property="FlowDirection" Value="LeftToRight" />
                 </Style>
             </CheckBox.Resources>
         </CheckBox>
+        <Label Content="Depth:" HorizontalAlignment="Left" Margin="102,18,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" x:Name="CPU1DepthInput" Text="8" TextWrapping="Wrap" VerticalAlignment="Top" Width="24" Margin="148,24,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
+        <Label Content="Depth:" HorizontalAlignment="Left" Margin="102,51,0,0" VerticalAlignment="Top"/>
+        <TextBox HorizontalAlignment="Left" x:Name="CPU2DepthInput" Text="8" TextWrapping="Wrap" VerticalAlignment="Top" Width="24" Margin="148,57,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
+
+
+        <GroupBox Header="CPU Score Modifiers" Margin="181,0,10,73">
+            <Grid>
+                <TextBox HorizontalAlignment="Left" x:Name="CPU1PiecesInput" Text="1000" TextWrapping="Wrap" VerticalAlignment="Top" Width="41" Margin="43,6,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right" VerticalScrollBarVisibility="Disabled" Height="18" MaxHeight="18"/>
+                <Label Content="Pieces" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left" x:Name="CPU1PositionInput" Text="100" TextWrapping="Wrap" VerticalAlignment="Top" Width="41" Margin="141,6,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
+                <Label Content="Position" HorizontalAlignment="Left" Margin="89,0,0,0" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left" x:Name="CPU1RandomInput" Text="10" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" Margin="239,6,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
+                <Label Content="Random" HorizontalAlignment="Left" Margin="187,0,0,0" VerticalAlignment="Top"/>
+
+                <TextBox HorizontalAlignment="Left" x:Name="CPU2PiecesInput" Text="1000" TextWrapping="Wrap" VerticalAlignment="Top" Width="41" Margin="43,40,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
+                <Label Content="Pieces" HorizontalAlignment="Left" Margin="0,34,0,0" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left" x:Name="CPU2PositionInput" Text="100" TextWrapping="Wrap" VerticalAlignment="Top" Width="41" Margin="141,40,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
+                <Label Content="Position" HorizontalAlignment="Left" Margin="89,34,0,0" VerticalAlignment="Top"/>
+                <TextBox HorizontalAlignment="Left" x:Name="CPU2RandomInput" Text="10" TextWrapping="Wrap" VerticalAlignment="Top" Width="40" Margin="239,40,0,0" InputScope="Number" PreviewTextInput="NumberValidationTextBox" TextAlignment="Right"/>
+                <Label Content="Random" HorizontalAlignment="Left" Margin="187,34,0,0" VerticalAlignment="Top"/>
+            </Grid>
+        </GroupBox>
     </Grid>
 </Window>
